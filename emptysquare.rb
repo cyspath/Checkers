@@ -13,4 +13,7 @@ class EmptySquare
 		true
 	end
 
+	def set_icon
+	end
+
 end
