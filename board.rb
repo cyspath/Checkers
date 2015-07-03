@@ -5,10 +5,10 @@ require_relative 'emptysquare'
 class Board
 	attr_accessor :cursor_pos, :grid
 
-	def initialize
+	def initialize(populate = true)
 		@grid = Array.new(8) { Array.new(8) { EmptySquare.new } }
 		@cursor_pos = [0,0]
-		populate_starting_grid
+		populate_starting_grid if populate
 	end
 
 
@@ -36,17 +36,20 @@ class Board
 			if sqr.color == :white
 				@grid[0][sqr_idx].king = true
 				@grid[0][sqr_idx].set_icon
+				puts "    A king(white) has been crowned!"
 			end
 		end
 		@grid[7].each_with_index do |sqr, sqr_idx|
 			if sqr.color == :black
 				@grid[7][sqr_idx].king = true
 				@grid[7][sqr_idx].set_icon
+				puts "    A king(black) has been crowned!"
 			end
 		end
 	end
 
 	def winner_found
+		# find_pieces(color).empty?
 		white = false
 		black = false
 		@grid.each do |row|
@@ -88,7 +91,7 @@ class Board
 	def render
 		system "clear"
 		puts
-		puts "          Checkers"
+		puts "      ☆ ☆ Checkers ☆ ☆ "
 		puts
 		@grid.each_with_index do |row, row_idx|
 			print "      "
@@ -136,12 +139,12 @@ class Board
 
 	######## duplicate the board itself (not just grid) #######
   def dupe
-    new_board = Board.new
+    new_board = Board.new(false)
     copy_grid = new_board.grid
     @grid.each_with_index do |row, row_idx|
       row.each_with_index do |square, col_idx|
         if !square.empty?
-          copy_grid[row_idx][col_idx] = square.class.new([row_idx, col_idx], square.color, Board.new)
+          copy_grid[row_idx][col_idx] = square.class.new(square.color, [row_idx, col_idx], square.king)
         else
           copy_grid[row_idx][col_idx] = square.class.new
         end

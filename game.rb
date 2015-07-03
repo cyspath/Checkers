@@ -10,9 +10,13 @@ class Checkers
 	end
 
 	def run
+		render_board
+		intro
+		sleep 1.5
 
 		until game_over || draw
 			render_board
+
 
 			select_and_move
 
@@ -45,18 +49,17 @@ class Checkers
 
 	def move_to_loc(start_pos)
 
-			puts "Where to move the piece?"
+			puts "Where do you want move the piece?"
 			output = cursor_movement #gives desired coordinate, enter pressed
 			#check if its a valid move
 			piece_to_be_moved = @board.current_piece(start_pos) #piece
 
 			if piece_to_be_moved.valid_moves(output, @board) == true
 				render_board
-				puts "Your piece is moved to #{output}"
+				# puts "Your piece is moved to #{output}"
 				return true
 			else
-				##### maybe check for DRAW here?
-				puts "Unable to move there!"
+				puts "Unable to move there!, please re-do your move."
 				return false
 			end
 
@@ -73,7 +76,7 @@ class Checkers
 				break
 			end
 
-			puts "Please choose your own piece."
+			puts "Please select one of your own piece only."
 
 		end
 
@@ -113,9 +116,9 @@ class Checkers
 			end
 
 			@board.set_new_cursor_pos(new_cursor_pos)
-			
+
 			render_board
-			puts "Current cursor position is #{@board.cursor_pos}"
+			# puts "Current cursor position is #{@board.cursor_pos}"
 
 			if output == [0,0]
 				break
@@ -145,6 +148,11 @@ class Checkers
 
   def switch_players
   	@players.reverse!
+  end
+
+  def intro
+  	puts "      Use 'WASD' to move"
+  	puts "  'Enter' to select and place "
   end
 
 end
